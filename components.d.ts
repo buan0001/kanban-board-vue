@@ -10,6 +10,7 @@ declare module 'vue' {
     CreateCardDialog: typeof import('./src/components/CreateCardDialog.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SubmitCardDialog: typeof import('./src/components/SubmitCardDialog.vue')['default']
     TrelloBoard: typeof import('./src/components/TrelloBoard.vue')['default']
     TrelloCard: typeof import('./src/components/TrelloCard.vue')['default']
     TrelloList: typeof import('./src/components/TrelloList.vue')['default']

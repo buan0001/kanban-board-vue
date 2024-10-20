@@ -1,8 +1,7 @@
 interface Card {
   id: number
   title: string
-  text: string
-  listId: number
-  placement: number
+  body: string
+  listId?: number
 }
 export type { Card }

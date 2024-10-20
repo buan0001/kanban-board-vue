@@ -1,17 +1,7 @@
 <script setup lang="ts">
 import type { List } from "../types/List";
 import { ref } from "vue";
-import CreateCardDialog from "../components/CreateCardDialog.vue";
-import { Card } from "@/types/Card";
-// import Draggable from "vuedraggable";
-import draggable from "vuedraggable";
-// import TrelloList from './TrelloList.vue';
-
-//   id: number
-//   title: string
-//   text: string
-//   list: string
-//   placement: number
+import TrelloList from "@/components/TrelloList.vue";
 
 const nextCardId = ref(0);
 
@@ -193,67 +183,20 @@ const board = ref([
 //   },
 // ] as List[]);
 
-function addCardToList(listId: number, card: { title: string; text: string }) {
-  console.log(listId);
-  const correctList = board.value[listId];
-  console.log("Correct list:", correctList);
-  const submitCard = {
-    ...card,
-    placement: correctList.tasks.length ? correctList.tasks.length + 1 : 1,
-    listId,
-    id: nextCardId.value++,
-  };
-  console.log("Submitable card:", submitCard);
-  correctList.tasks.push(submitCard);
-}
+
 
 function test(event: Event) {
   console.log("drag event:", event);
   console.log("Tasks after dragging:", board.value);
 }
+
 </script>
 
 <template>
   <v-container>
     <v-row>
-      <v-col v-for="list in board" :key="list.id">
-        <div style="min-height: 5000px">
-          <v-card class="bg-orange-lighten-3 mx-auto h-100">
-            <v-card-title class="text-h4">{{ list.heading }}</v-card-title>
-            <v-container class="border h-100">
-              <draggable
-                v-model="list.tasks"
-                itemKey="id"
-                @change="test"
-                group="lists"
-                class="min-height-200"
-              >
-                <template #item="{ element: card }">
-                  <v-col :key="card.id" cols="12">
-                    <v-card class="mb-1 bg-blue-grey-darken-1">
-                      <v-card-title>{{ card.title }}</v-card-title>
-                      <v-card-text>{{ card.text }}</v-card-text>
-                    </v-card>
-                  </v-col>
-                </template>
-                <template #empty>
-                  <v-col cols="12">
-                    <v-card class="mb-1 bg-grey-lighten-2">
-                      <v-card-text class="text-center">
-                        Drop items here
-                      </v-card-text>
-                    </v-card>
-                  </v-col>
-                </template>
-              </draggable>
-
-              <CreateCardDialog
-                :listId="list.id"
-                :submit="addCardToList"
-              ></CreateCardDialog>
-            </v-container>
-          </v-card>
-        </div>
+      <v-col v-for="(list, index) in board" :key="list.id">
+        <TrelloList v-model:list="board[index]" v-model:nextCardId="nextCardId"></TrelloList>
       </v-col>
     </v-row>
   </v-container>

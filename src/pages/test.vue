@@ -9,6 +9,7 @@ const animeList = ref([
 </script>
 
 <template>
+
   <div v-for="list in animeList">
     <draggable v-model="list.animes" tag="ol" group="stuff">
       <template #item="{ element: anime }">
