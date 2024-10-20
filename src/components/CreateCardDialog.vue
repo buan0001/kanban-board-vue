@@ -10,16 +10,9 @@ const dialog = ref(false);
 const newPost = ref({title:"", body:""});
 
 
-console.log("List id is:", props.listId);
-
 function addNewCard() {
-  // console.log("New post:", newPost.value);
-  // console.log("New post title:", newPost.value.title);
-  // console.log("And list id is:", props.listId);
-  
-  
   dialog.value = false;
-  if (props.submit){
+  if (props.submit && props.listId){
     props.submit(props.listId, {title: newPost.value.title, text: newPost.value.body})
   }
 }
@@ -28,7 +21,7 @@ function addNewCard() {
 
 <template>
   <div class="text-center pa-4">
-    <v-btn @click="dialog = true"> Open Dialog </v-btn>
+    <v-btn @click="dialog = true"> Add task </v-btn>
 
     <v-dialog v-model="dialog" width="auto">
       <v-card title="Add a new task">
@@ -37,9 +30,9 @@ function addNewCard() {
             label="Name of the new task"
             v-model="newPost.title"
           ></v-text-field>
-          <div>{{ newPost.title }}</div>
+
           <v-textarea label="Details" v-model="newPost.body"></v-textarea>
-          <div>{{ newPost.body }}</div>
+
         </div>
         <v-divider></v-divider>
         <template v-slot:actions>
