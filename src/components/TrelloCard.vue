@@ -11,8 +11,9 @@ function editClicked() {
   openDialog.value = true;
   console.log("Card:",card);
   
-  currentCard.value = { ...card };
-}
+  // currentCard.value = JSON.parse(JSON.stringify(card));
+  currentCard.value = {title: card.title, body: card.body, id:card.id};
+  }
 </script>
 
 <template>
@@ -23,18 +24,19 @@ function editClicked() {
         isIconHovered ? 'bg-red-lighten-3' : 'bg-blue-grey-darken-1'
       "
     >
-      <v-card-title>
+      <v-card-subtitle >
         {{ card.title }}
         <v-icon
-          size="tiny"
+          
           @mouseenter="isIconHovered = true"
           @mouseleave="isIconHovered = false"
           @click="editClicked"
         >
           mdi-pencil
         </v-icon>
-      </v-card-title>
-      <v-card-text>{{ card.body }}</v-card-text>
+      </v-card-subtitle>
+      <v-card-text class="text-small wrap-text">{{ card.body }}</v-card-text>
+      <!-- <v-card-text class="text-small">{{ card.body }}</v-card-text> -->
     </v-card>
   </v-col>
 </template>
@@ -43,4 +45,9 @@ function editClicked() {
 .on-hover {
   background-color: #ffeb3b; /* Highlight color */
 }
+.wrap-text {
+  white-space: normal; /* Allow text to wrap */
+  word-break: break-word; /* Break long words */
+}
 </style>
+

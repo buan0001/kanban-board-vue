@@ -1,36 +1,47 @@
 <script setup lang="ts">
-import { ref, computed, watch } from "vue";
+import { ref, computed, watch, watchEffect } from "vue";
 import type { Card } from "@/types/Card";
 
-const { submit, cardToUpdate = { title: "", body: "", id: 0 } } = defineProps<{
-  submit?: Function;
-  cardToUpdate?: Card;
-}>();
+// const emit = defineEmits<{
+//   submit: [string] 
+// }>()
+const submit = defineEmits(['submit']);
 
-const title = ref(cardToUpdate?.title || '')
-const body = ref(cardToUpdate?.body || '')
-const isUpdate = computed(() => cardToUpdate.id ? true : false)
+const title = ref('')
+const body = ref('')
 
 const isDialogOpen = defineModel("isOpen", { default: false });
+const props = defineProps<{cardToUpdate: Card}>()
+// const cardToUpdate = defineProps<{card: Card}>()
+// const cardToUpdate = defineModel<Card>("cardToUpdate")
+const isUpdate = computed(() => props.cardToUpdate.id ? true : false)
 
-console.log("Card to update:",cardToUpdate);
 
-watch(() => cardToUpdate, (newCard) => {
-  console.log("New card:",newCard);
-  
+watch(props, (newCard) => {
   if (newCard) {
-    title.value = newCard.title;
-    body.value = newCard.body;
+    title.value = newCard.cardToUpdate.title;
+    body.value = newCard.cardToUpdate.body;
+    console.log("title:", title.value);
   }
-});
+  console.log("new card:", newCard.cardToUpdate);
+}, { immediate: true });
 
 function addNewCard() {
-  isDialogOpen.value = false;
-  console.log("submit:", cardToUpdate);
+  console.log("Submitting:");
+  console.log("title :", title.value);
+  console.log("body :", body.value);
+  console.log("cardToUpdate :", props.cardToUpdate);
   if (submit) {
-    submit({ title, body, id: cardToUpdate.id });
+    submit('submit',{ title:title.value, body:body.value, id: props.cardToUpdate.id });
+    // submit('submit',{ title, body, id: props.value?.id });
   }
+  clear()
 }
+
+function clear(){
+  isDialogOpen.value = false;
+}
+
 </script>
 
 <!-- <template>
@@ -61,18 +72,19 @@ function addNewCard() {
         <v-card-title> {{ isUpdate ? "Update" : "Create" }} card</v-card-title>
         <div class="ma-5">
           <v-text-field
-            label="Name of the new task"
+            label="Name of the task"
             v-model="title"
           ></v-text-field>
 
           <v-textarea label="Details" v-model="body"></v-textarea>
         </div>
         <v-divider></v-divider>
-        <template v-slot:actions>
+        <v-card-actions>
+        <!-- <template v-slot:actions> -->
           <v-btn
             variant="outlined"
             text="Close"
-            @click="isDialogOpen = false"
+            @click="clear"
           ></v-btn>
           <v-spacer></v-spacer>
           <v-btn
@@ -81,7 +93,8 @@ function addNewCard() {
             text="Confirm"
             @click="addNewCard"
           ></v-btn>
-        </template>
+        </v-card-actions>
+        <!-- </template> -->
       </v-card>
     </v-dialog>
   </div>

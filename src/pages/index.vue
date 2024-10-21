@@ -3,7 +3,8 @@ import type { List } from "../types/List";
 import { ref } from "vue";
 import TrelloList from "@/components/TrelloList.vue";
 
-const nextCardId = ref(0);
+const nextCardId = ref(1);
+const nextListId = ref(1)
 
 // const board = ref({
 //   headers: [
@@ -67,10 +68,14 @@ const nextCardId = ref(0);
 //     },
 //   ],
 // });
-
+// interface Board {
+//   id: number,
+//   heading: string,
+//   tasks: List[]
+// }
 const board = ref([
   {
-    id: 0,
+    id: nextListId.value++,
     heading: "To do",
     tasks: [
       {
@@ -91,7 +96,7 @@ const board = ref([
     ],
   },
   {
-    id: 1,
+    id: nextListId.value++,
     heading: "Doing",
     tasks: [
       {
@@ -102,7 +107,7 @@ const board = ref([
     ],
   },
   {
-    id: 2,
+    id: nextListId.value++,
     heading: "Done",
     tasks: [
       {
@@ -117,7 +122,30 @@ const board = ref([
       },
     ],
   },
-] as List[]);
+]
+  )
+// let board = ref([{id:0, heading:'', tasks:[{id:0, title:'', body:''}]}])
+loadFromStorage()
+
+function loadFromStorage(){
+  let stored = localStorage.getItem('board')
+  if (stored){
+    board.value = JSON.parse(stored)
+
+    // Set the id-generators values appropriately
+    nextListId.value = board.value.length
+    nextCardId.value = 1;
+    for (const list of board.value) {  
+      nextCardId.value += list.tasks.length
+    }
+
+    console.log("Next card id value:",nextCardId.value);
+    console.log("Next list value:",nextListId.value);
+    console.log("Retrived:",board);
+  }
+  
+}
+
 // const board = ref([
 //   {
 //     id: 0,
@@ -185,25 +213,61 @@ const board = ref([
 
 
 
-function test(event: Event) {
-  console.log("drag event:", event);
-  console.log("Tasks after dragging:", board.value);
+function handleNewList() {
+  console.log("adding new list");
+  board.value.push({id: nextListId.value++, heading:'', tasks:[]})
+  saveListToStorage()
 }
+
+// let lastUpdate = Date.now();
+function saveListToStorage(){
+  console.log("Lists changed!");
+  // console.log("Last update:",lastUpdate.toString());
+  // const now = Date.now()
+  // if (lastUpdate > now)
+  localStorage.setItem('board', JSON.stringify( board.value))
+  
+ 
+}
+
+function handleDeleteList(id: number){
+  console.log("Deleting list with id",id);
+  
+}
+
 
 </script>
 
 <template>
-  <v-container class="bg-red-lighten-2 h-100 m-a">
-    <v-row>
-      <v-col v-for="(list, index) in board" :key="list.id">
-        <TrelloList v-model:list="board[index]" v-model:nextCardId="nextCardId"></TrelloList>
+  <v-container fluid>
+    <v-row class="no-wrap" style="overflow-x: auto; white-space: nowrap;">
+      <v-col v-for="list in board" :key="list.id" class="d-inline-block" style="width: 300px;">
+        <TrelloList :list="list" @update:list="saveListToStorage" @delete:list="handleDeleteList"/> 
+      </v-col>
+      <v-col class="d-inline-block" style="width: 300px;">
+        <v-btn @click="handleNewList">Add new list</v-btn>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
+<!-- 
+<template>
+  <v-container fluid class="bg-red-lighten-2 h-100 m-a">
+    <v-row class="no-wrap" style="overflow-x: auto; white-space: nowrap;">
+      <v-col v-for="(list, index) in board" :key="list.id">
+        <TrelloList v-model:list="board[index]" v-model:nextCardId="nextCardId"></TrelloList>
+      </v-col>
+    
+    <v-btn @click="handleNewList">Add new list</v-btn>
+    </v-row>
+  </v-container>
+</template> -->
+
 <style scoped>
-.min-height-200 {
-  min-height: 500px;
+.no-wrap {
+  display: flex;
+  flex-wrap: nowrap;
 }
 </style>
+

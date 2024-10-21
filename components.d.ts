@@ -7,11 +7,11 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    CreateCardDialog: typeof import('./src/components/CreateCardDialog.vue')['default']
+    EmitTest: typeof import('./src/components/EmitTest.vue')['default']
+    EmitTwo: typeof import('./src/components/EmitTwo.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SubmitCardDialog: typeof import('./src/components/SubmitCardDialog.vue')['default']
-    TrelloBoard: typeof import('./src/components/TrelloBoard.vue')['default']
     TrelloCard: typeof import('./src/components/TrelloCard.vue')['default']
     TrelloList: typeof import('./src/components/TrelloList.vue')['default']
   }
