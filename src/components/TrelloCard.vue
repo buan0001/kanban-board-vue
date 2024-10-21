@@ -20,7 +20,7 @@ function editClicked() {
     <v-card
       style="cursor: pointer"
       :class="
-        isIconHovered ? 'mb-1 bg-red-lighten-3' : 'mb-1 bg-blue-grey-darken-1'
+        isIconHovered ? 'bg-red-lighten-3' : 'bg-blue-grey-darken-1'
       "
     >
       <v-card-title>

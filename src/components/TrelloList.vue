@@ -16,6 +16,10 @@ function addCardToList(card: Card) {
     if (card.id) {
       const correctTask = list.value.tasks?.find((task) => task.id == card.id);
       console.log("Correct task:", correctTask);
+      if (correctTask) {
+        correctTask.body = card.body;
+        correctTask.title = card.title;
+      }
     } else if (nextCardId.value) {
       const submitCard = {
         ...card,
@@ -32,7 +36,7 @@ const currentCard = ref({ title: "", body: "", id: 0 });
 </script>
 
 <template>
-  <v-card class="mx-auto h-100" v-if="list">
+  <v-card class="h-100 bg-teal-lighten-4" v-if="list">
     <v-card-title class="text-h4">
       <v-text-field
         v-model="list.heading"
@@ -47,16 +51,19 @@ const currentCard = ref({ title: "", body: "", id: 0 });
     </v-card-title>
 
     <v-container class="border h-100">
-      <draggable v-model="list.tasks" itemKey="id" group="lists">
-        <template #item="{ element: card }">
-          <TrelloCard
-            :card
-            v-model:openDialog="isDialogOpen"
-            v-model:currentCard="currentCard"
-          />
-        </template>
-      </draggable>
-      <v-btn @click="isDialogOpen = true"> Add task </v-btn>
+      <v-col>
+        <draggable v-model="list.tasks" itemKey="id" group="lists">
+          <template #item="{ element: card }">
+            <TrelloCard
+              :card
+              v-model:openDialog="isDialogOpen"
+              v-model:currentCard="currentCard"
+            />
+          </template>
+        </draggable>
+        <v-spacer></v-spacer>
+        <v-btn color="info" @click="isDialogOpen = true"> Add task </v-btn>
+      </v-col>
 
       <SubmitCardDialog
         :submit="addCardToList"
