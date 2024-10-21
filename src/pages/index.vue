@@ -12,18 +12,18 @@ const board = ref([
     tasks: [
       {
         id: nextCardId.value++,
-        title: "Brush my teeth",
-        body: "It needs to be two minutes at least",
+        title: "Do important business thing",
+        body: "A lot of important details here",
       },
       {
         id: nextCardId.value++,
         title: "Walk the dog",
-        body: "A nice long walk in the sunday sun",
+        body: "Very important, please keep doing this task once started",
       },
       {
         id: nextCardId.value++,
-        title: "Shave after shower",
-        body: "Would be nice before school starts again",
+        title: "Make JavaScript framework",
+        body: "The world is waiting for a new JS framework",
       },
     ],
   },
@@ -33,8 +33,8 @@ const board = ref([
     tasks: [
       {
         id: nextCardId.value++,
-        title: "Sleep well",
-        body: "Good rest is important",
+        title: "Breathe",
+        body: "This task MUST NOT leave 'doing'",
       },
     ],
   },
@@ -44,13 +44,13 @@ const board = ref([
     tasks: [
       {
         id: nextCardId.value++,
-        title: "Have breakfast",
-        body: "Energy is needed to withstand the toll of living",
+        title: "Make trello board",
+        body: "Please dont spend too much time, not needed",
       },
       {
         id: nextCardId.value++,
-        title: "Breathe",
-        body: "Everything needs air, so get some",
+        title: "Respond to emails",
+        body: "The title says it all, really",
       },
     ],
   },
