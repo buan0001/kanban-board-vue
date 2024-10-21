@@ -9,24 +9,26 @@ import SubmitCardDialog from "./SubmitCardDialog.vue";
 const list = defineModel<List>("list");
 const nextCardId = defineModel<number>("nextCardId");
 
-// const props = defineProps<{list: List}>()
-
-const cardsInList = ref<Card[]>([]);
 const isDisabled = ref(true);
 
-function addCardToList(card: { title: string; text: string }) {
-  if (list.value && nextCardId.value) {
-    const submitCard = {
-      ...card,
-      id: (nextCardId.value += 1),
-    };
-    console.log("Submitable card:", submitCard);
-    list.value.tasks?.push(submitCard);
+function addCardToList(card: Card) {
+  if (list.value) {
+    if (card.id) {
+      const correctTask = list.value.tasks?.find((task) => task.id == card.id);
+      console.log("Correct task:", correctTask);
+    } else if (nextCardId.value) {
+      const submitCard = {
+        ...card,
+        id: (nextCardId.value += 1),
+      };
+      console.log("Submitable card:", submitCard);
+      list.value.tasks?.push(submitCard);
+    }
   }
 }
 
 const isDialogOpen = ref(false);
-const currentCard = ref({title:"", body:"", id:0})
+const currentCard = ref({ title: "", body: "", id: 0 });
 </script>
 
 <template>
@@ -39,7 +41,7 @@ const currentCard = ref({title:"", body:"", id:0})
         style="cursor: pointer"
         @click:append="isDisabled = !isDisabled"
         hint="Toggle edit to the right"
-        :variant="isDisabled ?  'underlined' : 'solo'"
+        :variant="isDisabled ? 'underlined' : 'solo'"
       >
       </v-text-field>
     </v-card-title>
@@ -47,10 +49,14 @@ const currentCard = ref({title:"", body:"", id:0})
     <v-container class="border h-100">
       <draggable v-model="list.tasks" itemKey="id" group="lists">
         <template #item="{ element: card }">
-          <TrelloCard :card v-model:openDialog="isDialogOpen" v-model:currentCard="currentCard"/>
+          <TrelloCard
+            :card
+            v-model:openDialog="isDialogOpen"
+            v-model:currentCard="currentCard"
+          />
         </template>
       </draggable>
-          <v-btn @click="isDialogOpen = true"> Add task </v-btn>
+      <v-btn @click="isDialogOpen = true"> Add task </v-btn>
 
       <SubmitCardDialog
         :submit="addCardToList"
