@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import TrelloCard from "./TrelloCard.vue";
+import KanbanCard from "./KanbanCard.vue";
 import type { Card } from "@/types/Card";
 import { List } from "@/types/List";
 import draggable from "vuedraggable";
@@ -111,7 +111,7 @@ function editCardClicked(card: Card) {
           @change="$emit('update:list')"
         >
           <template #item="{ element: card }">
-            <TrelloCard
+            <KanbanCard
               @deleteCard="deleteCardClicked"
               @editCard="editCardClicked"
               :card

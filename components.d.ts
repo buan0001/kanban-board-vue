@@ -7,6 +7,9 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    KanbanBoard: typeof import('./src/components/KanbanBoard.vue')['default']
+    KanbanCard: typeof import('./src/components/KanbanCard.vue')['default']
+    KanbanList: typeof import('./src/components/KanbanList.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SubmitCardDialog: typeof import('./src/components/SubmitCardDialog.vue')['default']
